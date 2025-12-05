@@ -12,11 +12,11 @@ function gen:create(mines)
             m = m - 1
         end
     end
-
+    
     for i, v in ipairs(GRID.cells) do
-        for j, cell in ipairs(GRID.cells) do
+        for j, cell in ipairs(v) do
             if not cell.mine then
-                self:countMines(cell)
+                cell.value = self:countMines(cell)
             end
         end
     end
@@ -24,10 +24,14 @@ end
 
 function gen:countMines(cell)
     local count = 0
-    local function checkSide(factorX, factorY)
-        local cC = GRID.cells[cell.r + factorX][cell.c + factorY]
-        if cC and cC.mine then
-            count = count + 1
+    local function checkSide(dx, dy)
+        local nr = cell.r + dx
+        local nc = cell.c + dy
+        
+        if GRID.cells[nr] and GRID.cells[nr][nc] then
+            if GRID.cells[nr][nc].mine then
+                count = count + 1
+            end
         end
     end
 
@@ -38,6 +42,8 @@ function gen:countMines(cell)
     checkSide(1, -1)
     checkSide(1, 0)
     checkSide(1, 1)
+
+    return count
 end
 
 return gen
