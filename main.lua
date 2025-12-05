@@ -1,11 +1,15 @@
 wW, wH = love.graphics.getDimensions()
 
 function love.load()
+    loadState(100, 20)
+end
+
+function loadState(mines, size)
     GRID = require("grid")
     GEN = require("gen")
     QUAD = require("quad")
-    gridInstance = GRID:new(20, 20)
-    GEN:create(100)
+    gridInstance = GRID:new(size, size)
+    GEN:create(mines)
 end
 
 function love.draw()

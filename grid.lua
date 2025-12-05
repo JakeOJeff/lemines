@@ -83,15 +83,25 @@ function grid:mousepressed(x, y, button)
     local cell = self:hover()
     if button == 1 then
         if cell and not cell.flagged then
-            cell.revealed = true
+            if not cell.revealed then
+                if cell.mine then
+                    cell.revealed = true
+                        loadState(100, 20)
+
+                else
+                    GEN:revealFlood(cell)
+                end
+            elseif cell.revealed and cell.value > 0 and GEN:countFlagged(cell) == cell.value then
+                GEN:revealNearby(cell) 
+            end
+
         end
+
     elseif button == 2 then
         if cell and not cell.revealed then
-            cell.flagged = true
+            cell.flagged = not cell.flagged
         end
     end
 end
-
-
 
 return grid
