@@ -6,7 +6,13 @@ end
 
 function ai:beginScout()
     while self:countRevealed() < 5 do
-        self:chooseRandom()
+        if self:countRevealed() <= 2 then
+            self:chooseRandom()
+        else
+            for i, v in ipairs(GEN:revealedCells()) do
+                
+            end
+        end
     end
 end
 

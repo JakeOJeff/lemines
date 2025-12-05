@@ -72,6 +72,18 @@ function gen:countFlagged(cell)
     return count
 end
 
+function gen:revealedCells()
+    local tab = {}
+    for i, v in ipairs(GRID.cells) do
+        for j, cell in ipairs(v) do
+            if cell.revealed then
+                table.insert(tab, cell)
+            end
+        end
+    end
+    return tab
+end
+
 function gen:revealFlood(cell)
     if cell.revealed or cell.flagged then
         return
