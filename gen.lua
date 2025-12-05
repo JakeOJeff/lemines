@@ -47,4 +47,30 @@ function gen:countMines(cell)
     return count
 end
 
+
+function gen:countFlagged(cell)
+    local count = 0
+    local function checkSide(dx, dy)
+        local nr = cell.r + dx
+        local nc = cell.c + dy
+        
+        if GRID.cells[nr] and GRID.cells[nr][nc] then
+            if GRID.cells[nr][nc].flagged then
+                count = count + 1
+            end
+        end
+    end
+
+    checkSide(-1, -1)
+    checkSide(0, -1)
+    checkSide(1, -1)
+    checkSide(-1, 0)
+
+    checkSide(1, 0)
+    checkSide(-1, 1)
+    checkSide(0, 1)
+    checkSide(1, 1)
+    return count
+end
+
 return gen

@@ -5,7 +5,7 @@ function love.load()
     GEN = require("gen")
     QUAD = require("quad")
     gridInstance = GRID:new(20, 20)
-    GEN:create(150)
+    GEN:create(100)
 end
 
 function love.draw()
