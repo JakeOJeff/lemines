@@ -87,7 +87,7 @@ function grid:mousepressed(x, y, button)
             if not cell.revealed then
                 if cell.mine then
                     cell.revealed = true
-                        loadState(100, 20)
+                        loadState(mineNum, 20)
 
                 else
                     GEN:revealFlood(cell)

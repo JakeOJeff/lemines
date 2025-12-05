@@ -1,7 +1,8 @@
 wW, wH = love.graphics.getDimensions()
 
 function love.load()
-    loadState(100, 20)
+    mineNum = 50
+    loadState(mineNum, 20)
 end
 
 function loadState(mines, size)
@@ -31,6 +32,6 @@ function love.keypressed(key)
    if key == "e" then
         AI:beginScout()
    elseif key == "r" then 
-        loadState(100, 20)
+        loadState(mineNum, 20)
    end 
 end
