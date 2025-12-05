@@ -8,10 +8,11 @@ function loadState(mines, size)
     QUAD = require("quad")
     GRID = require("grid")
     GEN = require("gen")
+    AI = require("ai")
     gridInstance = GRID:new(size, size)
     GEN:create(mines)
     GRID.revealAll = false
-
+    AI:load()
 end
 
 function love.draw()
