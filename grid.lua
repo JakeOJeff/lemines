@@ -19,7 +19,8 @@ function grid:new(w, h)
                 mine = false,
                 value = 0,
                 r = i,
-                c = j
+                c = j,
+                weight = 0
             }
         end
     end
