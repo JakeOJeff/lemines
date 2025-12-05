@@ -1,16 +1,16 @@
 wW, wH = love.graphics.getDimensions()
 
 function love.load()
-    loadState(500, 20)
+    loadState(100, 20)
 end
 
 function loadState(mines, size)
+    QUAD = require("quad")
     GRID = require("grid")
     GEN = require("gen")
-    QUAD = require("quad")
     gridInstance = GRID:new(size, size)
     GEN:create(mines)
-        GRID.revealAll = true
+        GRID.revealAll = false
 
 end
 
