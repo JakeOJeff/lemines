@@ -92,7 +92,7 @@ function grid:mousepressed(x, y, button)
                 else
                     GEN:revealFlood(cell)
                 end
-            elseif cell.revealed and cell.value > 0 and GEN:countFlagged(cell) == cell.value then
+            elseif cell.revealed and GEN:countFlagged(cell) == cell.value then
                 GEN:revealNearby(cell) 
             end
 

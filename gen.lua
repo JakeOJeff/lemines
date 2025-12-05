@@ -85,7 +85,7 @@ function gen:revealedCells()
 end
 
 function gen:revealFlood(cell)
-    if cell.revealed or cell.flagged then
+    if cell.revealed then
         return
     end
 
@@ -95,45 +95,36 @@ function gen:revealFlood(cell)
         return
     end
 
-    local function flood(dx, dy)
-        local nr = cell.r + dx
-        local nc = cell.c + dy
+    for dx = -1, 1 do
+        for dy = -1, 1 do
+            if not (dx == 0 and dy == 0) then
+                local nr = cell.r + dx
+                local nc = cell.c + dy
 
-        if GRID.cells[nr] and GRID.cells[nr][nc] then
-            local ncell = GRID.cells[nr][nc]
-            if not ncell.mine and not ncell.revealed then
-                self:revealFlood(ncell) -- recurse
+                if GRID.cells[nr] and GRID.cells[nr][nc] then
+                    local ncell = GRID.cells[nr][nc]
+                    if not ncell.mine and not ncell.revealed then
+                        self:revealFlood(ncell)
+                    end
+                end
             end
         end
     end
-
-    flood(-1, -1)
-    flood(0, -1)
-    flood(1, -1)
-    flood(-1, 0)
-    flood(1, 0)
-    flood(-1, 1)
-    flood(0, 1)
-    flood(1, 1)
 end
 
 function gen:revealNearby(cell)
-    local function reveal(dx, dy)
-        local nr = cell.r + dx
-        local nc = cell.c + dy
-        if GRID.cells[nr] and GRID.cells[nr][nc] then
-            if not GRID.cells[nr][nc].revealed and not GRID.cells[nr][nc].mine then
-                GRID.cells[nr][nc].revealed = true
+    for dx = -1, 1 do
+        for dy = -1, 1 do
+            if not (dx == 0 and dy == 0) then
+                local nr = cell.r + dx
+                local nc = cell.c + dy
+
+                local ncell = GRID.cells[nr] and GRID.cells[nr][nc]
+                if ncell and not ncell.mine and not ncell.revealed then
+                    self:revealFlood(ncell)
+                end
             end
         end
     end
-    reveal(-1, -1)
-    reveal(0, -1)
-    reveal(1, -1)
-    reveal(-1, 0)
-    reveal(1, 0)
-    reveal(-1, 1)
-    reveal(0, 1)
-    reveal(1, 1)
 end
 return gen

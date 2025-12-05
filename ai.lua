@@ -32,10 +32,24 @@ end
 
 function ai:chooseRandom()
     local cell = GRID.cells[love.math.random(1, GRID.w / GRID.size)][love.math.random(1, GRID.h / GRID.size)]
-
     if not cell.revealed then
         cell.revealed = true
-        return
+            print("MOVE ON:"..cell.r.." "..cell.c)
+        for dx = -1, 1 do
+            for dy = -1, 1 do
+                if not (dx == 0 and dy == 0) then
+                    local nr = cell.r + dx
+                    local nc = cell.c + dy
+
+                    if GRID.cells[nr] and GRID.cells[nr][nc] then
+                        local ncell = GRID.cells[nr][nc]
+                        if not ncell.mine and not ncell.revealed then
+                            GEN:revealFlood(ncell)
+                        end
+                    end
+                end
+            end
+        end
     end
 end
 
