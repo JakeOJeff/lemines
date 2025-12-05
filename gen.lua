@@ -22,8 +22,22 @@ function gen:create(mines)
     end
 end
 
-function ()
-    
+function gen:countMines(cell)
+    local count = 0
+    local function checkSide(factorX, factorY)
+        local cC = GRID.cells[cell.r + factorX][cell.c + factorY]
+        if cC and cC.mine then
+            count = count + 1
+        end
+    end
+
+    checkSide(-1, -1)
+    checkSide(-1, 0)
+    checkSide(-1, 1)
+
+    checkSide(1, -1)
+    checkSide(1, 0)
+    checkSide(1, 1)
 end
 
 return gen

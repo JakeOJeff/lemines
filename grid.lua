@@ -15,7 +15,9 @@ function grid:new(w, h)
             self.cells[i][j] = {
                 revealed = false,
                 mine = false,
-                value = 0
+                value = 0,
+                r = i,
+                c = j,
             }
         end
     end
