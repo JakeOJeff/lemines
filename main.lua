@@ -30,5 +30,7 @@ end
 function love.keypressed(key)
    if key == "e" then
         AI:beginScout()
+   elseif key == "r" then 
+        loadState(100, 20)
    end 
 end
