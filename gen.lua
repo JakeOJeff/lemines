@@ -36,13 +36,14 @@ function gen:countMines(cell)
     end
 
     checkSide(-1, -1)
-    checkSide(-1, 0)
-    checkSide(-1, 1)
-
+    checkSide(0, -1)
     checkSide(1, -1)
-    checkSide(1, 0)
-    checkSide(1, 1)
+    checkSide(-1, 0)
 
+    checkSide(1, 0)
+    checkSide(-1, 1)
+    checkSide(0, 1)
+    checkSide(1, 1)
     return count
 end
 
