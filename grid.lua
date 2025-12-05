@@ -9,6 +9,7 @@ function grid:new(w, h)
     self.y = wH / 2 - self.h / 2
 
     self.cells = {}
+    self.revealAll = false
     for i = 1, w do
         self.cells[i] = {}
         for j = 1, h do
@@ -32,7 +33,7 @@ function grid:draw()
         for j, cell in ipairs(v) do
             --                         love.graphics.rectangle("line", self.x + (i - 1) * self.size, self.y + (j - 1) * self.size, self.size,
             -- self.size)
-            if cell.revealed then
+            if cell.revealed or self.revealAll then
 
                 if cell.mine then
                     love.graphics.draw(spritesheet, QUAD.bombs[1], self.x + (i - 1) * self.size,
