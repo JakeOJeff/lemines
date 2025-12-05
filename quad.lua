@@ -7,6 +7,11 @@ function quad:generateNums()
 
 
     quad.nums = {}
+    quads.hidden = {
+        love.graphics.newQuad(16, 2 * 16, 16, 16, sheetW, sheetH),
+                love.graphics.newQuad(2 * 16, 2 * 16, 16, 16, sheetW, sheetH)
+
+    }
     quad.bombs = {
         love.graphics.newQuad(2 * 16, 3 * 16, 16, 16, sheetW, sheetH),
         love.graphics.newQuad(3 * 16, 3 * 16, 16, 16, sheetW, sheetH)
