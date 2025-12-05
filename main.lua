@@ -3,8 +3,9 @@ wW, wH = love.graphics.getDimensions()
 function love.load()
     GRID = require("grid")
     GEN = require("gen")
-    gridInstance = GRID:new(30, 20)
-    GEN:create(70)
+    QUAD = require("quad")
+    gridInstance = GRID:new(20, 20)
+    GEN:create(150)
 end
 
 function love.draw()

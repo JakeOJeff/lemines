@@ -7,17 +7,18 @@ function quad:generateNums()
 
 
     quad.nums = {}
-    for i = 0, 3 do
-        quad.nums[i + 1] = love.graphics.newQuad(i * 16, i * 16, 16, sheetW, sheetH)
+    quad.bombs = {
+        love.graphics.newQuad(2 * 16, 3 * 16, 16, 16, sheetW, sheetH),
+        love.graphics.newQuad(3 * 16, 3 * 16, 16, 16, sheetW, sheetH)
+    }
+    for i = 1, 4 do -- 1 - 4
+        quad.nums[i] = love.graphics.newQuad((i - 1) * 16, 0, 16,16, sheetW, sheetH)
     end
+    for i = 1, 4 do -- 5 - 8
+        quad.nums[i + 4] = love.graphics.newQuad((i - 1) * 16, 16, 16,16, sheetW, sheetH)
+    end
+    quad.nums[9] = love.graphics.newQuad(0, 2 * 16, 16, 16, sheetW, sheetH) -- 0
 end
 
-function quad:drawNums()
-    for i, v in ipairs(GRID.cells) do
-        for j, cell in ipairs(v) do
-            if not cell.mine then
-                
-            end
-        end
-    end
-end
+
+return quad

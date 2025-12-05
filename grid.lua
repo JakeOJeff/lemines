@@ -22,6 +22,8 @@ function grid:new(w, h)
         end
     end
 
+    QUAD:generateNums()
+
 end
 
 function grid:draw()
@@ -30,15 +32,18 @@ function grid:draw()
 
             love.graphics.rectangle("line", self.x + (i - 1) * self.size, self.y + (j - 1) * self.size, self.size,
                 self.size)
-            if cell == self:hover() or cell.mine then
-                love.graphics.setColor(0.8, 0.8, 0.8)
-                love.graphics.rectangle("fill", self.x + (i - 1) * self.size, self.y + (j - 1) * self.size, self.size,
-                    self.size)
+            if cell.mine then
+                love.graphics.draw(spritesheet, QUAD.bombs[1], self.x + (i - 1) * self.size, self.y + (j - 1) * self.size)
             end
             love.graphics.setColor(1, 1, 1)
-            if not cell.mine then
-                love.graphics.print(cell.value, self.x + (i - 1) * self.size, self.y + (j - 1) * self.size)
-
+            if not cell.mine  then
+                -- love.graphics.print(cell.value, self.x + (i - 1) * self.size, self.y + (j - 1) * self.size)
+                local q = QUAD.nums[cell.value]
+                if q and cell.value > 0 then
+                    love.graphics.draw(spritesheet, q, self.x + (i - 1) * self.size, self.y + (j - 1) * self.size)
+                else
+                    love.graphics.draw(spritesheet,  QUAD.nums[9], self.x + (i - 1) * self.size, self.y + (j - 1) * self.size)
+                end
             end
         end
     end
