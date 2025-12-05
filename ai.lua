@@ -5,13 +5,8 @@ function ai:load()
 end
 
 function ai:beginScout()
-    local revealedCount = self:countRevealed()
-    while revealedCount < 5 do
-        if revealedCount <= 2 then
-            self:chooseRandom()
-        else
-
-        end
+    while self:countRevealed() < 5 do
+        self:chooseRandom()
     end
 end
 
@@ -19,11 +14,6 @@ function ai:chooseRandom()
     local cell = GRID.cells[love.math.random(1, GRID.w/GRID.size)][love.math.random(1, GRID.h/GRID.size)]
     if not cell.revealed then
         cell.revealed = true
-        if cell.mine then
-            return
-        end
-
-
     end
 end
 
