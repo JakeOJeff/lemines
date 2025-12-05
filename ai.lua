@@ -57,7 +57,6 @@ function ai:assignWeight()
     for i, v in ipairs(GRID.cells) do
         for j, cell in ipairs(v) do
             local s = self:adjacentSum(cell)
-            s = s + self:adjacentRevealedCount(cell)
             cell.weight = s
         end
     end
@@ -108,7 +107,11 @@ function ai:adjacentSum(cell)
 
                 if GRID.cells[nr] and GRID.cells[nr][nc] then
                     local ncell = GRID.cells[nr][nc]
-                    sum = sum + self:checkSubFlagCount(ncell)
+                    if ncell.revealed then
+                        sum = sum + 1
+                        sum = sum + self:checkSubFlagCount(ncell)
+                    end
+                    
                 end
             end
         end
