@@ -12,6 +12,18 @@ function gen:create(mines)
             m = m - 1
         end
     end
+
+    for i, v in ipairs(GRID.cells) do
+        for j, cell in ipairs(GRID.cells) do
+            if not cell.mine then
+                self:countMines(cell)
+            end
+        end
+    end
+end
+
+function ()
+    
 end
 
 return gen
