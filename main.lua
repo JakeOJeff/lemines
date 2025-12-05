@@ -10,7 +10,7 @@ function loadState(mines, size)
     GEN = require("gen")
     gridInstance = GRID:new(size, size)
     GEN:create(mines)
-        GRID.revealAll = false
+    GRID.revealAll = false
 
 end
 
