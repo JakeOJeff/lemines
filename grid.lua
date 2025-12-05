@@ -14,6 +14,7 @@ function grid:new(w, h)
         for j = 1, h do
             self.cells[i][j] = {
                 revealed = false,
+                flagged = false,
                 mine = false,
                 value = 0,
                 r = i,
@@ -49,7 +50,14 @@ function grid:draw()
                     end
                 end
             else
-                
+                if cell.flagged then
+                    love.graphics.draw(spritesheet, QUAD.hidden[2], self.x + (i - 1) * self.size,
+                        self.y + (j - 1) * self.size)
+                else
+                    love.graphics.draw(spritesheet, QUAD.hidden[1], self.x + (i - 1) * self.size,
+                        self.y + (j - 1) * self.size)
+                end
+
             end
 
         end
@@ -72,10 +80,14 @@ function grid:hover()
 end
 
 function grid:mousepressed(x, y, button)
+    local cell = self:hover()
     if button == 1 then
-        local cell = self:hover()
-        if cell then
+        if cell and not cell.flagged then
             cell.revealed = true
+        end
+    elseif button == 2 then
+        if cell and not cell.revealed then
+            cell.flagged = true
         end
     end
 end

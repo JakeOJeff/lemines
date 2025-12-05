@@ -7,7 +7,7 @@ function quad:generateNums()
 
 
     quad.nums = {}
-    quads.hidden = {
+    quad.hidden = {
         love.graphics.newQuad(16, 2 * 16, 16, 16, sheetW, sheetH),
                 love.graphics.newQuad(2 * 16, 2 * 16, 16, 16, sheetW, sheetH)
 
