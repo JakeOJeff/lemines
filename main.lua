@@ -1,8 +1,10 @@
 wW, wH = love.graphics.getDimensions()
 
 function love.load()
-    mineNum = 50
-    loadState(mineNum, 20)
+    mineNum = 300 * 4
+    gameSize = 100
+    scrollVal = 0
+    loadState(mineNum, gameSize)
 end
 
 function loadState(mines, size)
@@ -16,7 +18,8 @@ function loadState(mines, size)
     AI:load()
 end
 
-function love.update()
+function love.update(dt)
+AI:update(dt)
 
 end
 
@@ -35,9 +38,10 @@ end
 
 function love.keypressed(key)
     if key == "e" then
-        AI:beginScout()
+        AI:startScout()
+
     elseif key == "r" then
-        loadState(mineNum, 20)
+        loadState(mineNum, gameSize)
     elseif key == "q" then
         for i, v in ipairs(GRID.cells) do
             for j, cell in ipairs(v) do

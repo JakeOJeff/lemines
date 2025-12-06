@@ -93,7 +93,7 @@ function grid:mousepressed(x, y, button)
             if not cell.revealed then
                 if cell.mine then
                     cell.revealed = true
-                    loadState(mineNum, 20)
+                    loadState(mineNum, gameSize)
 
                 else
                     GEN:revealFlood(cell)
