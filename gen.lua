@@ -104,6 +104,8 @@ function gen:revealFlood(cell)
                 if GRID.cells[nr] and GRID.cells[nr][nc] then
                     local ncell = GRID.cells[nr][nc]
                     if not ncell.mine and not ncell.revealed then
+                        print("MOVE ON:" .. cell.r .. " " .. cell.c)
+
                         self:revealFlood(ncell)
                     end
                 end
@@ -121,6 +123,7 @@ function gen:revealNearby(cell)
 
                 local ncell = GRID.cells[nr] and GRID.cells[nr][nc]
                 if ncell and not ncell.mine and not ncell.revealed then
+                    print("MOVE ON:" .. cell.r .. " " .. cell.c)
                     self:revealFlood(ncell)
                 end
             end

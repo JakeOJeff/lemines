@@ -1,7 +1,7 @@
 local ai = {}
 
 function ai:load()
-
+    moves = {}
 end
 
 function ai:beginScout()
@@ -99,6 +99,8 @@ function ai:revealAdjIfFlagged()
     for i, v in ipairs(GRID.cells) do
         for j, cell in ipairs(v) do
             if cell.value == self:countAdjFlag(cell) then
+                        print("MOVE ON:" .. cell.r .. " " .. cell.c)
+
                 GEN:revealNearby(cell)
             end
         end
