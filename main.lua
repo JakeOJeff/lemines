@@ -1,7 +1,7 @@
 wW, wH = love.graphics.getDimensions()
 
 function love.load()
-    mineNum = 50
+    mineNum = 150
     loadState(mineNum, 20)
 end
 

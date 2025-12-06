@@ -61,6 +61,11 @@ function grid:draw()
                 end
 
             end
+            if cell.weight and love.keyboard.isDown("t") then
+                love.graphics.setColor(0,0,0)
+                love.graphics.print(cell.weight, self.x + (i - 1) * self.size, self.y + (j - 1) * self.size)
+                love.graphics.setColor(1,1,1)
+            end
 
         end
     end
@@ -88,13 +93,13 @@ function grid:mousepressed(x, y, button)
             if not cell.revealed then
                 if cell.mine then
                     cell.revealed = true
-                        loadState(mineNum, 20)
+                    loadState(mineNum, 20)
 
                 else
                     GEN:revealFlood(cell)
                 end
             elseif cell.revealed and GEN:countFlagged(cell) == cell.value then
-                GEN:revealNearby(cell) 
+                GEN:revealNearby(cell)
             end
 
         end

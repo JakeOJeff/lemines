@@ -28,6 +28,7 @@ function ai:beginScout()
             end
         end
     end
+    self:assignWeight()
 end
 
 function ai:chooseRandom()
@@ -56,8 +57,7 @@ end
 function ai:assignWeight()
     for i, v in ipairs(GRID.cells) do
         for j, cell in ipairs(v) do
-            local s = self:adjacentSum(cell)
-            cell.weight = s
+            cell.weight = cell.revealed and 0 or self:adjacentSum(cell)
         end
     end
 end
@@ -97,6 +97,10 @@ function ai:chooseAdjacent()
 
 end
 
+function ()
+    
+end
+
 function ai:adjacentSum(cell)
     local sum = 0
     for dx = -1, 1 do
@@ -116,6 +120,7 @@ function ai:adjacentSum(cell)
             end
         end
     end
+    return sum
 end
 
 function ai:checkSubFlagCount(cell)
@@ -131,6 +136,27 @@ function ai:checkSubFlagCount(cell)
                     local ncell = GRID.cells[nr][nc]
                     if ncell.flagged then
                         val = val - 1
+                    end
+                end
+            end
+        end
+    end
+
+    return val
+end
+function ai:countAdjFlag(cell)
+    local val = 0
+    for dx = -1, 1 do
+        for dy = -1, 1 do
+            if not (dx == 0 and dy == 0) then
+                local nr = cell.r + dx
+                local nc = cell.c + dy
+
+
+                if GRID.cells[nr] and GRID.cells[nr][nc] then
+                    local ncell = GRID.cells[nr][nc]
+                    if ncell.flagged then
+                        val = val + 1
                     end
                 end
             end
