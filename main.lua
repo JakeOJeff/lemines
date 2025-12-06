@@ -17,11 +17,16 @@ function loadState(mines, size)
 end
 
 function love.update()
-    
+
 end
 
 function love.draw()
     GRID:draw()
+    local hoverCell = GRID:hover()
+    if hoverCell then
+        love.graphics.print(hoverCell.r .. "," .. hoverCell.c, 20, 20)
+
+    end
 end
 
 function love.mousepressed(x, y, button)
@@ -29,9 +34,18 @@ function love.mousepressed(x, y, button)
 end
 
 function love.keypressed(key)
-   if key == "e" then
+    if key == "e" then
         AI:beginScout()
-   elseif key == "r" then 
+    elseif key == "r" then
         loadState(mineNum, 20)
-   end 
+    elseif key == "q" then
+        for i, v in ipairs(GRID.cells) do
+            for j, cell in ipairs(v) do
+                cell.flagged = false
+                cell.revealed = false
+                cell.weight = 0
+
+            end
+        end
+    end
 end

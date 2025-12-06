@@ -30,13 +30,14 @@ function ai:beginScout()
     end
     self:assignWeight()
     self:revealAdjIfFlagged()
+    self:flagUnrevealed()
 end
 
 function ai:chooseRandom()
     local cell = GRID.cells[love.math.random(1, GRID.w / GRID.size)][love.math.random(1, GRID.h / GRID.size)]
     if not cell.revealed then
         cell.revealed = true
-        print("MOVE ON:" .. cell.r .. " " .. cell.c)
+        print("[RAND] MOVE ON:" .. cell.r .. " " .. cell.c)
         table.insert(self.moves, {cell.r, cell.c})
         for dx = -1, 1 do
             for dy = -1, 1 do
@@ -90,7 +91,7 @@ function ai:chooseRandomAdjacent(cell)
         return nil
     end
     local random = unrevealedCells[love.math.random(1, #unrevealedCells)]
-    print("MOVE ON:" .. cell.r .. " " .. cell.c)
+    print("[RAND ADJ] MOVE ON:" .. cell.r .. " " .. cell.c)
     table.insert(self.moves, {cell.r, cell.c})
 
     return random
@@ -100,7 +101,7 @@ function ai:revealAdjIfFlagged()
     for i, v in ipairs(GRID.cells) do
         for j, cell in ipairs(v) do
             if cell.value == self:countAdjFlag(cell) then
-                print("MOVE ON:" .. cell.r .. " " .. cell.c)
+                print("[FLAG-REV] MOVE ON:" .. cell.r .. " " .. cell.c)
                 table.insert(self.moves, {cell.r, cell.c})
 
                 GEN:revealNearby(cell)
@@ -170,6 +171,17 @@ function ai:countAdjFlag(cell)
     end
 
     return val
+end
+
+function ai:flagUnrevealed()
+    for i, v in ipairs(GRID.cells) do
+        for j, cell in ipairs(v) do
+            if not cell.revealed then
+                -- assuming its a mine and flagging its
+                cell.flagged = true
+            end
+        end
+    end
 end
 
 function ai:countRevealed()
