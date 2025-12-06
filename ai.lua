@@ -29,6 +29,7 @@ function ai:beginScout()
         end
     end
     self:assignWeight()
+    self:revealAdjIfFlagged()
 end
 
 function ai:chooseRandom()
@@ -93,12 +94,15 @@ function ai:chooseRandomAdjacent(cell)
     return random
 end
 
-function ai:chooseAdjacent()
 
-end
-
-function ()
-    
+function ai:revealAdjIfFlagged()
+    for i, v in ipairs(GRID.cells) do
+        for j, cell in ipairs(v) do
+            if cell.value == self:countAdjFlag(cell) then
+                GEN:revealNearby(cell)
+            end
+        end
+    end
 end
 
 function ai:adjacentSum(cell)
