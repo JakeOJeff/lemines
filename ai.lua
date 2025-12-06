@@ -1,7 +1,7 @@
 local ai = {}
 
 function ai:load()
-    moves = {}
+    self.moves = {}
 end
 
 function ai:beginScout()
@@ -37,6 +37,7 @@ function ai:chooseRandom()
     if not cell.revealed then
         cell.revealed = true
         print("MOVE ON:" .. cell.r .. " " .. cell.c)
+        table.insert(self.moves, {cell.r, cell.c})
         for dx = -1, 1 do
             for dy = -1, 1 do
                 if not (dx == 0 and dy == 0) then
@@ -90,16 +91,17 @@ function ai:chooseRandomAdjacent(cell)
     end
     local random = unrevealedCells[love.math.random(1, #unrevealedCells)]
     print("MOVE ON:" .. cell.r .. " " .. cell.c)
+    table.insert(self.moves, {cell.r, cell.c})
 
     return random
 end
-
 
 function ai:revealAdjIfFlagged()
     for i, v in ipairs(GRID.cells) do
         for j, cell in ipairs(v) do
             if cell.value == self:countAdjFlag(cell) then
-                        print("MOVE ON:" .. cell.r .. " " .. cell.c)
+                print("MOVE ON:" .. cell.r .. " " .. cell.c)
+                table.insert(self.moves, {cell.r, cell.c})
 
                 GEN:revealNearby(cell)
             end
@@ -121,7 +123,7 @@ function ai:adjacentSum(cell)
                         sum = sum + 1
                         sum = sum + self:checkSubFlagCount(ncell)
                     end
-                    
+
                 end
             end
         end
@@ -136,7 +138,6 @@ function ai:checkSubFlagCount(cell)
             if not (dx == 0 and dy == 0) then
                 local nr = cell.r + dx
                 local nc = cell.c + dy
-
 
                 if GRID.cells[nr] and GRID.cells[nr][nc] then
                     local ncell = GRID.cells[nr][nc]
@@ -157,7 +158,6 @@ function ai:countAdjFlag(cell)
             if not (dx == 0 and dy == 0) then
                 local nr = cell.r + dx
                 local nc = cell.c + dy
-
 
                 if GRID.cells[nr] and GRID.cells[nr][nc] then
                     local ncell = GRID.cells[nr][nc]

@@ -105,6 +105,7 @@ function gen:revealFlood(cell)
                     local ncell = GRID.cells[nr][nc]
                     if not ncell.mine and not ncell.revealed then
                         print("MOVE ON:" .. cell.r .. " " .. cell.c)
+                        table.insert(AI.moves, {cell.r, cell.c})
 
                         self:revealFlood(ncell)
                     end
@@ -123,7 +124,6 @@ function gen:revealNearby(cell)
 
                 local ncell = GRID.cells[nr] and GRID.cells[nr][nc]
                 if ncell and not ncell.mine and not ncell.revealed then
-                    print("MOVE ON:" .. cell.r .. " " .. cell.c)
                     self:revealFlood(ncell)
                 end
             end
