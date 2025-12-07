@@ -26,7 +26,11 @@ end
 
 function ai:assignWeight()
     GRID:iterate(function(cell)
-        cell.weight = cell.revealed and 0 or self:adjacentWeight(cell)
+        if cell.revealed or cell.flagged then
+            cell.weight = 0
+        else
+        cell.weight = self:adjacentWeight(cell)
+        end
     end)
 end
 
@@ -40,14 +44,12 @@ function ai:checkIfRevealedMine()
     return hit
 end
 
-
-
-
 function ai:flagHighest()
     local cell = self:findHighestWeight()
-    if cell then
-        cell.flagged = true
-    end
+    if not cell or cell.weight <= 0 then return false end
+
+    cell.flagged = true
+    return true
 end
 
 function ai:floodRevealedValues()
@@ -71,27 +73,18 @@ function ai:findHighestWeight()
 end
 
 function ai:adjacentWeight(cell)
-    local sum = 0
+    if cell.revealed or cell.flagged then return 0 end
+    local weight = 0
 
     for _, ncell in ipairs(GRID:getNeighbors(cell)) do
-        if ncell.revealed then
-            sum = sum + 1
-            sum = sum + self:checkSubFlagCount(ncell)
+        if ncell.revealed and ncell.value > 0 then
+            local remaining = ncell.value - GEN:countFlagged(ncell)
+            if remaining > 0 then
+                weight = weight + remaining
+            end
         end
     end
-    return sum
-end
-
-function ai:checkSubFlagCount(cell)
-    local val = cell.value
-
-    for _, ncell in ipairs(GRID:getNeighbors(cell)) do
-        if ncell.flagged then
-            val = val - 1
-        end
-    end
-
-    return val
+    return weight
 end
 
 
