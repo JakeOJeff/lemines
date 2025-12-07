@@ -133,4 +133,12 @@ function grid:getNeighbors(cell)
 
     return result
 end
+
+function grid:iterate(func)
+    for i, v in ipairs(GRID.cells) do
+        for j, cell in ipairs(v) do
+            func(cell)
+        end
+    end
+end
 return grid

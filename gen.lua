@@ -13,13 +13,11 @@ function gen:create(mines)
         end
     end
 
-    for i, v in ipairs(GRID.cells) do
-        for j, cell in ipairs(v) do
-            if not cell.mine then
-                cell.value = self:countMines(cell)
-            end
+    GRID:iterate(function(cell)
+        if not cell.mine then
+            cell.value = self:countMines(cell)
         end
-    end
+    end)
 end
 
 function gen:countMines(cell)
@@ -47,13 +45,12 @@ end
 
 function gen:revealedCells()
     local tab = {}
-    for i, v in ipairs(GRID.cells) do
-        for j, cell in ipairs(v) do
-            if cell.revealed then
-                table.insert(tab, cell)
-            end
+
+    GRID:iterate(function(cell)
+        if cell.revealed then
+            table.insert(tab, cell)
         end
-    end
+    end)
     return tab
 end
 

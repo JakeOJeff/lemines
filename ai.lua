@@ -28,9 +28,10 @@ function ai:beginScout()
             end
         end
     end
-    -- self:assignWeight()
+    self:assignWeight()
     -- self:revealAdjIfFlagged()
     -- self:flagUnrevealed()
+    self:flagHighest()
 end
 
 function ai:chooseRandom()
@@ -38,95 +39,77 @@ function ai:chooseRandom()
     if not cell.revealed then
         GEN:revealNearby(cell)
         print("[RAND] MOVE ON:" .. cell.r .. " " .. cell.c)
-        table.insert(self.moves, {cell.r, cell.c})
-        for dx = -1, 1 do
-            for dy = -1, 1 do
-                if not (dx == 0 and dy == 0) then
-                    local nr = cell.r + dx
-                    local nc = cell.c + dy
+        table.insert(self.moves, { cell.r, cell.c })
 
-                    if GRID.cells[nr] and GRID.cells[nr][nc] then
-                        local ncell = GRID.cells[nr][nc]
-                        if not ncell.mine and not ncell.revealed then
-                            GEN:revealFlood(ncell)
-                        end
-                    end
-                end
+
+        for _, ncell in ipairs(GRID:getNeighbors(cell)) do
+            if not ncell.mine and not ncell.revealed then
+                GEN:revealFlood(ncell)
             end
         end
     end
 end
 
 function ai:assignWeight()
-    for i, v in ipairs(GRID.cells) do
-        for j, cell in ipairs(v) do
-            cell.weight = cell.revealed and 0 or self:adjacentSum(cell)
-        end
-    end
+    GRID:iterate(function(cell)
+        cell.weight = cell.revealed and 0 or self:adjacentSum(cell)
+    end)
 end
 
 function ai:chooseRandomAdjacent(cell)
     local unrevealedCells = {}
-    local function checkSide(dx, dy)
-        local nr = cell.r + dx
-        local nc = cell.c + dy
 
-        if GRID.cells[nr] and GRID.cells[nr][nc] then
-            if not GRID.cells[nr][nc].revealed then
-                table.insert(unrevealedCells, GRID.cells[nr][nc])
-            end
+    for _, ncell in ipairs(GRID:getNeighbors(cell)) do
+        if not ncell.revealed then
+            table.insert(unrevealedCells, ncell)
         end
     end
-
-    checkSide(-1, -1)
-    checkSide(0, -1)
-    checkSide(1, -1)
-    checkSide(-1, 0)
-
-    checkSide(1, 0)
-    checkSide(-1, 1)
-    checkSide(0, 1)
-    checkSide(1, 1)
     if #unrevealedCells == 0 then
         return nil
     end
     local random = unrevealedCells[love.math.random(1, #unrevealedCells)]
+
     print("[RAND ADJ] MOVE ON:" .. cell.r .. " " .. cell.c)
-    table.insert(self.moves, {cell.r, cell.c})
+    table.insert(self.moves, { cell.r, cell.c })
 
     return random
 end
 
-function ai:revealAdjIfFlagged()
-    for i, v in ipairs(GRID.cells) do
-        for j, cell in ipairs(v) do
-            if cell.value == self:countAdjFlag(cell) then
-                print("[FLAG-REV] MOVE ON:" .. cell.r .. " " .. cell.c)
-                table.insert(self.moves, {cell.r, cell.c})
+-- function ai:revealAdjIfFlagged()
+--     GRID:iterate(function(cell)
+--         if cell.value == self:countAdjFlag(cell) then
+--             print("[FLAG-REV] MOVE ON:" .. cell.r .. " " .. cell.c)
+--             table.insert(self.moves, { cell.r, cell.c })
 
-                GEN:revealNearby(cell)
-            end
-        end
+--             GEN:revealNearby(cell)
+--         end
+--     end)
+-- end
+
+function ai:flagHighest()
+    local cell = self:findHighestWeight()
+    if cell then
+        cell.flagged = true
     end
 end
-
+function ai:findHighestWeight()
+    local highest = 0
+    local highestCell = nil
+    GRID:iterate(function (cell)
+        if cell.weight > highest then
+            highest = cell.weight
+            highestCell = cell
+        end
+    end)
+    return highestCell
+end
 function ai:adjacentSum(cell)
     local sum = 0
-    for dx = -1, 1 do
-        for dy = -1, 1 do
-            if not (dx == 0 and dy == 0) then
-                local nr = cell.r + dx
-                local nc = cell.c + dy
 
-                if GRID.cells[nr] and GRID.cells[nr][nc] then
-                    local ncell = GRID.cells[nr][nc]
-                    if ncell.revealed then
-                        sum = sum + 1
-                        sum = sum + self:checkSubFlagCount(ncell)
-                    end
-
-                end
-            end
+    for _, ncell in ipairs(GRID:getNeighbors(cell)) do
+        if ncell.revealed then
+            sum = sum + 1
+            sum = sum + self:checkSubFlagCount(ncell)
         end
     end
     return sum
@@ -134,39 +117,22 @@ end
 
 function ai:checkSubFlagCount(cell)
     local val = cell.value
-    for dx = -1, 1 do
-        for dy = -1, 1 do
-            if not (dx == 0 and dy == 0) then
-                local nr = cell.r + dx
-                local nc = cell.c + dy
 
-                if GRID.cells[nr] and GRID.cells[nr][nc] then
-                    local ncell = GRID.cells[nr][nc]
-                    if ncell.flagged then
-                        val = val - 1
-                    end
-                end
-            end
+    for _, ncell in ipairs(GRID:getNeighbors(cell)) do
+        if ncell.flagged then
+            val = val - 1
         end
     end
 
     return val
 end
+
 function ai:countAdjFlag(cell)
     local val = 0
-    for dx = -1, 1 do
-        for dy = -1, 1 do
-            if not (dx == 0 and dy == 0) then
-                local nr = cell.r + dx
-                local nc = cell.c + dy
 
-                if GRID.cells[nr] and GRID.cells[nr][nc] then
-                    local ncell = GRID.cells[nr][nc]
-                    if ncell.flagged then
-                        val = val + 1
-                    end
-                end
-            end
+    for _, ncell in ipairs(GRID:getNeighbors(cell)) do
+        if ncell.flagged then
+            val = val + 1
         end
     end
 
@@ -174,25 +140,21 @@ function ai:countAdjFlag(cell)
 end
 
 function ai:flagUnrevealed()
-    for i, v in ipairs(GRID.cells) do
-        for j, cell in ipairs(v) do
-            if not cell.revealed then
-                -- assuming its a mine and flagging its
-                cell.flagged = true
-            end
+    GRID:iterate(function (cell)
+        if not cell.revealed then
+            cell.flagged = true
         end
-    end
+    end)
 end
 
 function ai:countRevealed()
     local count = 0
-    for i, v in ipairs(GRID.cells) do
-        for j, cell in ipairs(v) do
-            if cell.revealed then
-                count = count + 1
-            end
+
+    GRID:iterate(function (cell)
+        if cell.revealed then
+            count = count + 1
         end
-    end
+    end)
 
     return count
 end
