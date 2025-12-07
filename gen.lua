@@ -55,7 +55,6 @@ function gen:revealedCells()
 end
 
 function gen:revealFlood(cell)
-    print("flooding")
     if cell.revealed then
         return
     end

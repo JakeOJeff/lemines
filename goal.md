@@ -1,0 +1,2 @@
+To create an AI, which first randomly selects some cells, if it was a mine, reset the game. Then create a weighted system, the highest value being a flag. The values are determined by this algorithm,
+checks revealed neighboring cells, a 'x' value is giving to the cell, which is the cells value subtracted by the neighboring flags of that cell, this 'x' value is then added along with the number of revealed cells in the initial cell. It then flags the highest value, then it tries to open up all cells which have their neighboring flag counts satisfied
