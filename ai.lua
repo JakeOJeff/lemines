@@ -2,6 +2,7 @@ local ai = {}
 
 function ai:load()
     self.moves = {}
+    self.highestWeight = nil
 end
 
 function ai:beginScout()
@@ -71,6 +72,8 @@ function ai:findHighestWeight()
     end)
     return highestCell
 end
+
+
 
 function ai:adjacentWeight(cell)
     if cell.revealed or cell.flagged then return 0 end

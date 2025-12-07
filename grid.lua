@@ -1,5 +1,5 @@
 local grid = {}
--- * TODO 
+-- * TODO
 function grid:new(w, h)
     self.size = 16
     self.w = self.size * w
@@ -26,7 +26,6 @@ function grid:new(w, h)
     end
 
     QUAD:generateNums()
-
 end
 
 function grid:draw()
@@ -35,7 +34,6 @@ function grid:draw()
             --                         love.graphics.rectangle("line", self.x + (i - 1) * self.size, self.y + (j - 1) * self.size, self.size,
             -- self.size)
             if cell.revealed or self.revealAll then
-
                 if cell.mine then
                     love.graphics.draw(spritesheet, QUAD.bombs[1], self.x + (i - 1) * self.size,
                         self.y + (j - 1) * self.size)
@@ -59,14 +57,25 @@ function grid:draw()
                     love.graphics.draw(spritesheet, QUAD.hidden[1], self.x + (i - 1) * self.size,
                         self.y + (j - 1) * self.size)
                 end
-
             end
+            love.graphics.setColor(1, 1, 0)
+            if AI:findHighestWeight() == cell then
+                love.graphics.setLineWidth(3)
+                love.graphics.rectangle("line", self.x + (i - 1) * self.size, self.y + (j - 1) * self.size, self.size,
+                    self.size)
+            end
+            love.graphics.setColor(0, 1, 1)
+            if cell.revealed and GEN:countFlagged(cell) == cell.value and cell.value > 0 then
+                love.graphics.setLineWidth(3)
+                love.graphics.rectangle("line", self.x + (i - 1) * self.size, self.y + (j - 1) * self.size, self.size,
+                    self.size)
+            end
+            love.graphics.setColor(1, 1, 1)
             if cell.weight and love.keyboard.isDown("t") then
-                love.graphics.setColor(0,0,0)
+                love.graphics.setColor(0, 0, 0)
                 love.graphics.print(cell.weight, self.x + (i - 1) * self.size, self.y + (j - 1) * self.size)
-                love.graphics.setColor(1,1,1)
+                love.graphics.setColor(1, 1, 1)
             end
-
         end
     end
 end
@@ -94,19 +103,18 @@ function grid:mousepressed(x, y, button)
                 if cell.mine then
                     cell.revealed = true
                     loadState(mineNum, gameSize)
-
                 else
                     GEN:revealFlood(cell)
                 end
             elseif cell.revealed and GEN:countFlagged(cell) == cell.value then
                 GEN:revealNearby(cell)
             end
-
+            AI:assignWeight()
         end
-
     elseif button == 2 then
         if cell and not cell.revealed then
             cell.flagged = not cell.flagged
+            AI:assignWeight()
         end
     end
 end
@@ -116,7 +124,7 @@ function grid:getNeighbors(cell)
 
     for dx = -1, 1 do
         for dy = -1, 1 do
-            if not(dx == 0 and dy ==0) then
+            if not (dx == 0 and dy == 0) then
                 local nr = cell.r + dx
                 local nc = cell.c + dy
 
@@ -141,4 +149,5 @@ function grid:iterate(func)
         end
     end
 end
+
 return grid
