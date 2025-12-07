@@ -64,7 +64,7 @@ function ai:findHighestWeight()
     local highest = 0
     local highestCell = nil
     GRID:iterate(function(cell)
-        if cell.weight > highest then
+        if not cell.revealed and not cell.flagged and cell.weight and cell.weight > highest then
             highest = cell.weight
             highestCell = cell
         end
