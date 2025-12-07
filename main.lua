@@ -26,7 +26,7 @@ function love.draw()
     GRID:draw()
     local hoverCell = GRID:hover()
     if hoverCell then
-        love.graphics.print(hoverCell.r .. "," .. hoverCell.c, 20, 20)
+        love.graphics.print(hoverCell.r .. "," .. hoverCell.c.."\n B-Click Y-Flag", 20, 20)
     end
     local len = #AI.moves
     for i = 1, 4 do

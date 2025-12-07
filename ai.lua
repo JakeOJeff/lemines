@@ -57,8 +57,7 @@ function ai:floodRevealedValues()
     GRID:iterate(function(cell)
         if cell.revealed and GEN:countFlagged(cell) == cell.value then
             GEN:revealNearby(cell)
-            print("[FLOOD] MOVE ON:" .. cell.r .. " " .. cell.c)
-            table.insert(self.moves, { cell.r, cell.c })
+
         end
     end)
 end

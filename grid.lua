@@ -58,14 +58,14 @@ function grid:draw()
                         self.y + (j - 1) * self.size)
                 end
             end
-            love.graphics.setColor(1, 1, 0)
             if AI:findHighestWeight() == cell then
+                love.graphics.setColor(1, 1, 0)
                 love.graphics.setLineWidth(3)
                 love.graphics.rectangle("line", self.x + (i - 1) * self.size, self.y + (j - 1) * self.size, self.size,
                     self.size)
             end
-            love.graphics.setColor(0, 1, 1)
-            if cell.revealed and GEN:countFlagged(cell) == cell.value and cell.value > 0 then
+            if GEN:countFlagged(cell) == cell.value and cell.value > 0 then
+                love.graphics.setColor(0, 1, 1)
                 love.graphics.setLineWidth(3)
                 love.graphics.rectangle("line", self.x + (i - 1) * self.size, self.y + (j - 1) * self.size, self.size,
                     self.size)

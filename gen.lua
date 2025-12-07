@@ -78,6 +78,8 @@ function gen:revealNearby(cell)
         if ncell and not ncell.revealed and not ncell.flagged then
             if ncell.value == 0 then
                 self:revealFlood(ncell)
+                print("[FLOOD] MOVE ON:" .. ncell.r .. " " .. ncell.c)
+                table.insert(AI.moves, { ncell.r, ncell.c })
             else
                 ncell.revealed = true
             end
