@@ -114,7 +114,7 @@ end
 function grid:getNeighbors(cell)
     local result = {}
 
-    for dx = 1, 1 do
+    for dx = -1, 1 do
         for dy = -1, 1 do
             if not(dx == 0 and dy ==0) then
                 local nr = cell.r + dx

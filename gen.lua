@@ -24,51 +24,24 @@ end
 
 function gen:countMines(cell)
     local count = 0
-    local function checkSide(dx, dy)
-        local nr = cell.r + dx
-        local nc = cell.c + dy
 
-        if GRID.cells[nr] and GRID.cells[nr][nc] then
-            if GRID.cells[nr][nc].mine then
-                count = count + 1
-            end
+    for _, ncell in ipairs(GRID:getNeighbors(cell)) do
+        if ncell.mine then
+            count = count + 1
         end
     end
-
-    checkSide(-1, -1)
-    checkSide(0, -1)
-    checkSide(1, -1)
-    checkSide(-1, 0)
-
-    checkSide(1, 0)
-    checkSide(-1, 1)
-    checkSide(0, 1)
-    checkSide(1, 1)
     return count
 end
 
 function gen:countFlagged(cell)
     local count = 0
-    local function checkSide(dx, dy)
-        local nr = cell.r + dx
-        local nc = cell.c + dy
 
-        if GRID.cells[nr] and GRID.cells[nr][nc] then
-            if GRID.cells[nr][nc].flagged then
-                count = count + 1
-            end
+    for _, ncell in ipairs(GRID:getNeighbors(cell)) do
+        if ncell.flagged then
+            count = count + 1
         end
     end
 
-    checkSide(-1, -1)
-    checkSide(0, -1)
-    checkSide(1, -1)
-    checkSide(-1, 0)
-
-    checkSide(1, 0)
-    checkSide(-1, 1)
-    checkSide(0, 1)
-    checkSide(1, 1)
     return count
 end
 
@@ -97,8 +70,8 @@ function gen:revealFlood(cell)
 
     for _, ncell in ipairs(GRID:getNeighbors(cell)) do
         if not ncell.revealed and not ncell.flagged then
-            table.insert(AI.moves, { cell.r, cell.c })
-            self:revealFlood(cell)
+            table.insert(AI.moves, { ncell.r, ncell.c })
+            self:revealFlood(ncell)
         end
     end
 end
@@ -106,7 +79,7 @@ end
 function gen:revealNearby(cell)
     for _, ncell in ipairs(GRID:getNeighbors(cell)) do
         if ncell and not ncell.revealed and not ncell.flagged then
-            self:revealFlood(cell)
+            self:revealFlood(ncell)
         end
     end
 end
