@@ -95,38 +95,18 @@ function gen:revealFlood(cell)
         return
     end
 
-    for dx = -1, 1 do
-        for dy = -1, 1 do
-            if not (dx == 0 and dy == 0) then
-                local nr = cell.r + dx
-                local nc = cell.c + dy
-
-                if GRID.cells[nr] and GRID.cells[nr][nc] then
-                    local ncell = GRID.cells[nr][nc]
-                    if not ncell.revealed and not ncell.flagged then
-                        print("[FLOOD-REVEAL] MOVE ON:" .. cell.r .. " " .. cell.c)
-                        table.insert(AI.moves, {cell.r, cell.c})
-
-                        self:revealFlood(ncell)
-                    end
-                end
-            end
+    for _, ncell in ipairs(GRID:getNeighbors(cell)) do
+        if not ncell.revealed and not ncell.flagged then
+            table.insert(AI.moves, { cell.r, cell.c })
+            self:revealFlood(cell)
         end
     end
 end
 
 function gen:revealNearby(cell)
-    for dx = -1, 1 do
-        for dy = -1, 1 do
-            if not (dx == 0 and dy == 0) then
-                local nr = cell.r + dx
-                local nc = cell.c + dy
-
-                local ncell = GRID.cells[nr] and GRID.cells[nr][nc]
-                if ncell and not ncell.revealed and not ncell.flagged then
-                    self:revealFlood(ncell)
-                end
-            end
+    for _, ncell in ipairs(GRID:getNeighbors(cell)) do
+        if ncell and not ncell.revealed and not ncell.flagged then
+            self:revealFlood(cell)
         end
     end
 end
