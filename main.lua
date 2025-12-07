@@ -27,7 +27,16 @@ function love.draw()
     local hoverCell = GRID:hover()
     if hoverCell then
         love.graphics.print(hoverCell.r .. "," .. hoverCell.c, 20, 20)
-
+    end
+    local len = #AI.moves
+    for i = 1, 4 do
+        local idx = len - 4 + i
+        if idx >= 1 and idx <= len then
+            local move = AI.moves[idx]
+            if move then
+                love.graphics.print(move[1] .. "," .. move[2], 20, 40 + (10 * i))
+            end
+        end
     end
 end
 
@@ -38,7 +47,6 @@ end
 function love.keypressed(key)
     if key == "e" then
         AI:beginScout()
-
     elseif key == "r" then
         loadState(mineNum, gameSize)
     elseif key == "q" then
@@ -47,7 +55,6 @@ function love.keypressed(key)
                 cell.flagged = false
                 cell.revealed = false
                 cell.weight = 0
-
             end
         end
     end

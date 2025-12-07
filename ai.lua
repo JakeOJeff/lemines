@@ -30,7 +30,7 @@ function ai:assignWeight()
         if cell.revealed or cell.flagged then
             cell.weight = 0
         else
-        cell.weight = self:adjacentWeight(cell)
+            cell.weight = self:adjacentWeight(cell)
         end
     end)
 end
@@ -57,6 +57,8 @@ function ai:floodRevealedValues()
     GRID:iterate(function(cell)
         if cell.revealed and GEN:countFlagged(cell) == cell.value then
             GEN:revealNearby(cell)
+            print("[FLOOD] MOVE ON:" .. cell.r .. " " .. cell.c)
+            table.insert(self.moves, { cell.r, cell.c })
         end
     end)
 end
@@ -73,8 +75,6 @@ function ai:findHighestWeight()
     return highestCell
 end
 
-
-
 function ai:adjacentWeight(cell)
     if cell.revealed or cell.flagged then return 0 end
     local weight = 0
@@ -89,7 +89,6 @@ function ai:adjacentWeight(cell)
     end
     return weight
 end
-
 
 function ai:countRevealed()
     local count = 0
