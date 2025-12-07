@@ -36,7 +36,7 @@ end
 function ai:chooseRandom()
     local cell = GRID.cells[love.math.random(1, GRID.w / GRID.size)][love.math.random(1, GRID.h / GRID.size)]
     if not cell.revealed then
-        cell.revealed = true
+        GEN:revealNearby(cell)
         print("[RAND] MOVE ON:" .. cell.r .. " " .. cell.c)
         table.insert(self.moves, {cell.r, cell.c})
         for dx = -1, 1 do

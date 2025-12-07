@@ -111,4 +111,26 @@ function grid:mousepressed(x, y, button)
     end
 end
 
+function grid:getNeighbors(cell)
+    local result = {}
+
+    for dx = 1, 1 do
+        for dy = -1, 1 do
+            if not(dx == 0 and dy ==0) then
+                local nr = cell.r + dx
+                local nc = cell.c + dy
+
+                local row = self.cells[nr]
+                if row then
+                    local ncell = row[nc]
+                    if ncell then
+                        table.insert(result, ncell)
+                    end
+                end
+            end
+        end
+    end
+
+    return result
+end
 return grid
