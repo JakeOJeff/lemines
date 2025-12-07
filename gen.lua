@@ -55,6 +55,7 @@ function gen:revealedCells()
 end
 
 function gen:revealFlood(cell)
+    print("flooding")
     if cell.revealed then
         return
     end
@@ -76,7 +77,11 @@ end
 function gen:revealNearby(cell)
     for _, ncell in ipairs(GRID:getNeighbors(cell)) do
         if ncell and not ncell.revealed and not ncell.flagged then
-            self:revealFlood(ncell)
+            if ncell.value == 0 then
+                self:revealFlood(ncell)
+            else
+                ncell.revealed = true
+            end
         end
     end
 end

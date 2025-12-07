@@ -18,7 +18,7 @@ function ai:beginScout()
             local pick = self:chooseRandomAdjacent(randCell)
 
             if pick then
-                GEN.revealNearby(pick)
+                GEN:revealNearby(pick)
                 if pick.mine then
                     loadState(mineNum, 20)
                     break
@@ -32,6 +32,7 @@ function ai:beginScout()
     -- self:revealAdjIfFlagged()
     -- self:flagUnrevealed()
     self:flagHighest()
+    self:floodRevealedValues()
 end
 
 function ai:chooseRandom()
@@ -92,10 +93,19 @@ function ai:flagHighest()
         cell.flagged = true
     end
 end
+
+function ai:floodRevealedValues()
+    GRID:iterate(function(cell)
+        if cell.revealed and GEN:countFlagged(cell) == cell.value then
+            GEN:revealNearby(cell)
+        end
+    end)
+end
+
 function ai:findHighestWeight()
     local highest = 0
     local highestCell = nil
-    GRID:iterate(function (cell)
+    GRID:iterate(function(cell)
         if cell.weight > highest then
             highest = cell.weight
             highestCell = cell
@@ -103,6 +113,7 @@ function ai:findHighestWeight()
     end)
     return highestCell
 end
+
 function ai:adjacentSum(cell)
     local sum = 0
 
@@ -127,30 +138,30 @@ function ai:checkSubFlagCount(cell)
     return val
 end
 
-function ai:countAdjFlag(cell)
-    local val = 0
+-- function ai:countAdjFlag(cell)
+--     local val = 0
 
-    for _, ncell in ipairs(GRID:getNeighbors(cell)) do
-        if ncell.flagged then
-            val = val + 1
-        end
-    end
+--     for _, ncell in ipairs(GRID:getNeighbors(cell)) do
+--         if ncell.flagged then
+--             val = val + 1
+--         end
+--     end
 
-    return val
-end
+--     return val
+-- end
 
-function ai:flagUnrevealed()
-    GRID:iterate(function (cell)
-        if not cell.revealed then
-            cell.flagged = true
-        end
-    end)
-end
+-- function ai:flagUnrevealed()
+--     GRID:iterate(function(cell)
+--         if not cell.revealed then
+--             cell.flagged = true
+--         end
+--     end)
+-- end
 
 function ai:countRevealed()
     local count = 0
 
-    GRID:iterate(function (cell)
+    GRID:iterate(function(cell)
         if cell.revealed then
             count = count + 1
         end

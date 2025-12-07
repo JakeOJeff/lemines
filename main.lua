@@ -1,8 +1,8 @@
 wW, wH = love.graphics.getDimensions()
 
 function love.load()
-    mineNum = 300 * 4
-    gameSize = 100
+    mineNum = 50
+    gameSize = 20
     scrollVal = 0
     loadState(mineNum, gameSize)
 end
