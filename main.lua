@@ -14,12 +14,11 @@ function loadState(mines, size)
     AI = require("ai")
     gridInstance = GRID:new(size, size)
     GEN:create(mines)
-    GRID.revealAll = false
     AI:load()
+    GRID.revealAll = false
 end
 
 function love.update(dt)
-AI:update(dt)
 
 end
 
@@ -38,7 +37,7 @@ end
 
 function love.keypressed(key)
     if key == "e" then
-        AI:startScout()
+        AI:beginScout()
 
     elseif key == "r" then
         loadState(mineNum, gameSize)
