@@ -27,3 +27,8 @@ You can use these guides to place the flags or click the cells or play on your o
 | Q | Reset |
 | LMB | Click on tiles |
 | RMB | Flag/Unflag |
+
+## Demo
+
+https://github.com/user-attachments/assets/067da04c-d1bd-4f17-a8d7-8b98bdc8959e
+
