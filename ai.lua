@@ -2,11 +2,10 @@ local ai = {}
 
 function ai:load()
     self.moves = {}
-    self.highestWeight = nil
 end
 
 function ai:beginScout()
-    while self:countRevealed() < 2 do
+    while GRID:countRevealed() < 2 do
         self:chooseRandom()
         if self:checkIfRevealedMine() then loadState(mineNum, gameSize) end
     end
@@ -89,16 +88,6 @@ function ai:adjacentWeight(cell)
     return weight
 end
 
-function ai:countRevealed()
-    local count = 0
 
-    GRID:iterate(function(cell)
-        if cell.revealed then
-            count = count + 1
-        end
-    end)
-
-    return count
-end
 
 return ai

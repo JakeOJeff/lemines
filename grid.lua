@@ -45,8 +45,15 @@ function grid:draw()
                     if q and cell.value > 0 then
                         love.graphics.draw(spritesheet, q, self.x + (i - 1) * self.size, self.y + (j - 1) * self.size)
                     else
+                        if self:checkComplete() then
+                            love.graphics.setColor(0, 1, 0)
+                        else
+                            love.graphics.setColor(1, 1, 1)
+                        end
                         love.graphics.draw(spritesheet, QUAD.nums[9], self.x + (i - 1) * self.size,
                             self.y + (j - 1) * self.size)
+                                                    love.graphics.setColor(1, 1, 1)
+
                     end
                 end
             else
@@ -142,6 +149,43 @@ function grid:getNeighbors(cell)
     return result
 end
 
+function grid:checkMine()
+    local flag = false
+    self:iterate(function (cell)
+        if cell.mine and cell.revealed then
+            flag = true
+        end
+    end)
+    return flag
+end
+function grid:checkComplete()
+    if not self:checkMine() and self:countFlagged() == mineNum and self:countRevealed() == (gameSize * gameSize) - mineNum then
+        return true
+    end
+    return false
+end
+function grid:countRevealed()
+    local count = 0
+
+    GRID:iterate(function(cell)
+        if cell.revealed then
+            count = count + 1
+        end
+    end)
+
+    return count
+end
+function grid:countFlagged()
+    local count = 0
+
+    GRID:iterate(function(cell)
+        if cell.flagged then
+            count = count + 1
+        end
+    end)
+
+    return count
+end
 function grid:iterate(func)
     for i, v in ipairs(GRID.cells) do
         for j, cell in ipairs(v) do
