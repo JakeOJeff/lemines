@@ -20,5 +20,10 @@ You can start up the game and then play like normal. You may see some yellow and
 You can use these guides to place the flags or click the cells or play on your own. If you want AI to run itself, just press **'E'**. It will activate an AI move per press.
 
 ## Quick Keybinds
-|--Key--|--Function--|
-|
+|Key|Function|
+|---|--------|
+| E | AI Scout |
+| R | Restart |
+| Q | Reset |
+| LMB | Click on tiles |
+| RMB | Flag/Unflag |
