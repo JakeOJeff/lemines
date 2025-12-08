@@ -5,14 +5,16 @@ function ai:load()
 end
 
 function ai:beginScout()
-    while GRID:countRevealed() < 2 do
-        self:chooseRandom()
-        self:checkIfRevealedMine()
-    end
-    self:assignWeight()
+    if not GRID:hitMine() then
+        while GRID:countRevealed() < 2 do
+            self:chooseRandom()
+            self:checkIfRevealedMine()
+        end
+        self:assignWeight()
 
-    self:flagHighest()
-    self:floodRevealedValues()
+        self:flagHighest()
+        self:floodRevealedValues()
+    end
 end
 
 function ai:chooseRandom()
@@ -57,7 +59,6 @@ function ai:floodRevealedValues()
     GRID:iterate(function(cell)
         if cell.revealed and GEN:countFlagged(cell) == cell.value then
             GEN:revealNearby(cell)
-
         end
     end)
 end
@@ -88,7 +89,5 @@ function ai:adjacentWeight(cell)
     end
     return weight
 end
-
-
 
 return ai

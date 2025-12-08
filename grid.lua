@@ -40,7 +40,7 @@ function grid:draw()
                         love.graphics.draw(spritesheet, QUAD.bombs[1], self.x + (i - 1) * self.size,
                             self.y + (j - 1) * self.size)
                     else
-                                                love.graphics.draw(spritesheet, QUAD.bombs[2], self.x + (i - 1) * self.size,
+                        love.graphics.draw(spritesheet, QUAD.bombs[2], self.x + (i - 1) * self.size,
                             self.y + (j - 1) * self.size)
                     end
                 end
@@ -58,8 +58,7 @@ function grid:draw()
                         end
                         love.graphics.draw(spritesheet, QUAD.nums[9], self.x + (i - 1) * self.size,
                             self.y + (j - 1) * self.size)
-                                                    love.graphics.setColor(1, 1, 1)
-
+                        love.graphics.setColor(1, 1, 1)
                     end
                 end
             else
@@ -133,6 +132,17 @@ function grid:mousepressed(x, y, button)
     end
 end
 
+function grid:hitMine()
+    local hit = false
+    self:iterate(function(cell)
+        if cell.hitMine or (cell.mine and cell.revealed) then
+            hit = true
+            self.revealAll = true
+        end
+    end)
+    return hit
+end
+
 function grid:getNeighbors(cell)
     local result = {}
 
@@ -158,19 +168,21 @@ end
 
 function grid:checkMine()
     local flag = false
-    self:iterate(function (cell)
+    self:iterate(function(cell)
         if cell.mine and cell.revealed then
             flag = true
         end
     end)
     return flag
 end
+
 function grid:checkComplete()
     if not self:checkMine() and self:countFlagged() == mineNum and self:countRevealed() == (gameSize * gameSize) - mineNum then
         return true
     end
     return false
 end
+
 function grid:countRevealed()
     local count = 0
 
@@ -182,6 +194,7 @@ function grid:countRevealed()
 
     return count
 end
+
 function grid:countFlagged()
     local count = 0
 
@@ -193,6 +206,7 @@ function grid:countFlagged()
 
     return count
 end
+
 function grid:iterate(func)
     for i, v in ipairs(GRID.cells) do
         for j, cell in ipairs(v) do
