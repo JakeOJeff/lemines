@@ -7,7 +7,7 @@ end
 function ai:beginScout()
     while GRID:countRevealed() < 2 do
         self:chooseRandom()
-        if self:checkIfRevealedMine() then loadState(mineNum, gameSize) end
+        self:checkIfRevealedMine()
     end
     self:assignWeight()
 
@@ -39,6 +39,7 @@ function ai:checkIfRevealedMine()
     GRID:iterate(function(cell)
         if cell.revealed and cell.mine then
             hit = true
+            cell.hitMine = true
         end
     end)
     return hit

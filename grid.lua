@@ -17,6 +17,7 @@ function grid:new(w, h)
                 revealed = false,
                 flagged = false,
                 mine = false,
+                hitMine = false,
                 value = 0,
                 r = i,
                 c = j,
@@ -35,8 +36,13 @@ function grid:draw()
             -- self.size)
             if cell.revealed or self.revealAll then
                 if cell.mine then
-                    love.graphics.draw(spritesheet, QUAD.bombs[1], self.x + (i - 1) * self.size,
-                        self.y + (j - 1) * self.size)
+                    if not cell.hitMine then
+                        love.graphics.draw(spritesheet, QUAD.bombs[1], self.x + (i - 1) * self.size,
+                            self.y + (j - 1) * self.size)
+                    else
+                                                love.graphics.draw(spritesheet, QUAD.bombs[2], self.x + (i - 1) * self.size,
+                            self.y + (j - 1) * self.size)
+                    end
                 end
                 love.graphics.setColor(1, 1, 1)
                 if not cell.mine then
@@ -105,11 +111,12 @@ end
 function grid:mousepressed(x, y, button)
     local cell = self:hover()
     if button == 1 then
-        if cell and not cell.flagged then
+        if cell and not cell.flagged and not self.revealAll then
             if not cell.revealed then
                 if cell.mine then
                     cell.revealed = true
-                    loadState(mineNum, gameSize)
+                    cell.hitMine = true
+                    self.revealAll = true
                 else
                     GEN:revealFlood(cell)
                 end
